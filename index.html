@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaiderBase - Smart Raid Assistant</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="./css/styles.css">
+    <meta name="theme-color" content="#FFD700">
+</head>
+<body>
+    <!-- HEADER CON ANIMACIÓN -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="title-animated">⚔️ RAIDERBASE ⚔️</h1>
+            <p class="subtitle">Tu Asistente Inteligente de Estrategias de Raids</p>
+            <div class="raid-indicator">
+                <span class="pulse"></span> SISTEMA ACTIVO
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN CON ICONOS -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-item active">🏠 INICIO</a>
+            <a href="#guides" class="nav-item">📖 GUÍAS</a>
+            <a href="#trials" class="nav-item">🎯 PRUEBAS</a>
+            <a href="#projects" class="nav-item">🎮 PROYECTOS</a>
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="container">
+        
+        <!-- SECCIÓN IZQUIERDA: ANALIZADOR DE ESTRATEGIAS -->
+        <section class="card card-primary">
+            <div class="card-header">
+                <h2>⚡ ANALIZADOR DE ESTRATEGIAS</h2>
+                <div class="raiders-icon">👥 RAIDERS</div>
+            </div>
+
+            <div class="form-group">
+                <label for="playerType">🎯 TIPO DE RAIDER</label>
+                <select id="playerType">
+                    <option value="">Selecciona tu rol...</option>
+                    <option value="stealth">🥷 Sigiloso (Infiltrador)</option>
+                    <option value="aggressive">⚡ Agresivo (Soldado)</option>
+                    <option value="collector">🎒 Recolector (Saqueador)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status">💪 NIVEL DE PODER</label>
+                <select id="status">
+                    <option value="">Selecciona tu nivel...</option>
+                    <option value="low">🔴 BAJO - Principiante</option>
+                    <option value="mid">🟡 MEDIO - Experimentado</option>
+                    <option value="high">🟢 ALTO - Veterano</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="resource">💰 RECURSO PRINCIPAL</label>
+                <select id="resource">
+                    <option value="">Selecciona tu recurso...</option>
+                    <option value="gold">🟡 ORO</option>
+                    <option value="energy">⚡ ENERGÍA</option>
+                    <option value="ammo">🔴 MUNICIÓN</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="level">📊 TU NIVEL</label>
+                <input type="number" id="level" placeholder="Ej: 15" min="1" value="1">
+            </div>
+
+            <button class="btn-analyze" onclick="analyzeStrategy()">🔥 ANALIZAR ESTRATEGIA</button>
+            <button class="btn-secondary" onclick="document.getElementById('output').innerText = ''; document.getElementById('stats').innerHTML = ''; document.getElementById('shareBtn').style.display = 'none';">🔄 LIMPIAR</button>
+
+            <!-- RESULTADO -->
+            <div class="result-container">
+                <div id="output" class="result">
+                    <p class="placeholder">💬 Aquí aparecerá tu estrategia personalizada...</p>
+                </div>
+                <button id="shareBtn" class="btn-share" onclick="shareStrategy()" style="display: none;">📤 COMPARTIR ESTRATEGIA</button>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DERECHA: ESTADÍSTICAS Y ARC RAIDERS -->
+        <section class="card card-secondary">
+            <div class="card-header">
+                <h2>📊 ESTADÍSTICAS</h2>
+                <div class="arc-logo">ARC</div>
+            </div>
+
+            <!-- STATS -->
+            <div id="stats" class="stats">
+                <div class="stat-item">
+                    <div class="stat-label">RIESGO</div>
+                    <div class="stat-value">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">EFICIENCIA</div>
+                    <div class="stat-value">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">RECOMPENSA</div>
+                    <div class="stat-value">--</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">RECURSO</div>
+                    <div class="stat-value">--</div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE RAIDERS -->
+            <div class="raiders-section">
+                <h3>🎮 RAIDERS ACTIVOS</h3>
+                <div class="raiders-grid">
+                    <div class="raider-card raider-stealth">
+                        <div class="raider-emoji">🥷</div>
+                        <div class="raider-name">SIGILOSO</div>
+                        <div class="raider-status">✓ LISTO</div>
+                    </div>
+                    <div class="raider-card raider-aggressive">
+                        <div class="raider-emoji">⚡</div>
+                        <div class="raider-name">AGRESIVO</div>
+                        <div class="raider-status">✓ LISTO</div>
+                    </div>
+                    <div class="raider-card raider-collector">
+                        <div class="raider-emoji">🎒</div>
+                        <div class="raider-name">RECOLECTOR</div>
+                        <div class="raider-status">✓ LISTO</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN ARC -->
+            <div class="arc-section">
+                <h3>🔴 SISTEMA ARC</h3>
+                <div class="arc-info">
+                    <div class="arc-item">
+                        <span class="arc-dot red"></span>
+                        <span>ALERTA ROJA</span>
+                    </div>
+                    <div class="arc-item">
+                        <span class="arc-dot yellow"></span>
+                        <span>PRECAUCIÓN</span>
+                    </div>
+                    <div class="arc-item">
+                        <span class="arc-dot green"></span>
+                        <span>SEGURO</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANIMACIÓN RAID -->
+            <div class="raid-animation">
+                <div class="raider-moving">👥</div>
+                <div class="raider-moving">👥</div>
+                <div class="raider-moving">👥</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2026 RaiderBase by javi112214 | Powered by ARC System</p>
+        <p class="footer-status">🟢 SISTEMA OPERATIVO | ⚡ CONECTADO | 🛡️ PROTEGIDO</p>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="./js/strategies.js"></script>
+    <script src="./js/app.js"></script>
+
+    <!-- SERVICE WORKER -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW registration failed:', err));
+        }
+    </script>
+</body>
+</html>
