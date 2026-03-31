@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#38bdf8">
+  <meta name="description" content="Tu asistente inteligente de estrategias de raids">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RaiderBase">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2338bdf8' width='192' height='192'/><text x='96' y='120' font-size='100' fill='white' text-anchor='middle' font-weight='bold'>⚔️</text></svg>">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%2338bdf8' width='192' height='192'/><text x='96' y='120' font-size='100' fill='white' text-anchor='middle' font-weight='bold'>⚔️</text></svg>">
+  <title>RaiderBase - Smart Raid Assistant</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <h1>⚔️ RaiderBase</h1>
+    <p>Tu Asistente Inteligente de Raids</p>
+  </div>
+</header>
+
+<main class="container">
+  <!-- FORMULARIO -->
+  <section class="card form-card">
+    <h2>📊 Tu Situación</h2>
+    
+    <div class="form-group">
+      <label for="playerType">Tipo de Jugador:</label>
+      <select id="playerType">
+        <option value="">Selecciona...</option>
+        <option value="stealth">🥷 Sigiloso</option>
+        <option value="aggressive">⚡ Agresivo</option>
+        <option value="collector">🎒 Recolector</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="resource">Recurso Principal:</label>
+      <select id="resource">
+        <option value="">Selecciona...</option>
+        <option value="cables">🔌 Cables</option>
+        <option value="metal">⚙️ Metal</option>
+        <option value="energy">⚡ Energía</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Estado de Recursos:</label>
+      <select id="status">
+        <option value="">Selecciona...</option>
+        <option value="low">📉 Pocos recursos</option>
+        <option value="mid">📊 Intermedio</option>
+        <option value="high">📈 Muchos recursos</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="level">Nivel:</label>
+      <input type="number" id="level" min="1" max="100" value="1" placeholder="Tu nivel">
+    </div>
+
+    <button class="btn-analyze" onclick="analyzeStrategy()">🔍 Analizar Estrategia</button>
+  </section>
+
+  <!-- RESULTADO -->
+  <section class="card result-card">
+    <h2>💡 Recomendación</h2>
+    <div class="result" id="output">
+      <p class="placeholder">Completa el formulario y presiona "Analizar"...</p>
+    </div>
+    
+    <div id="stats" class="stats"></div>
+    <button class="btn-secondary" onclick="shareStrategy()" style="display:none;" id="shareBtn">📤 Compartir</button>
+  </section>
+</main>
+
+<button class="install-btn" id="installBtn" onclick="installApp()">
+  📲 Instalar App
+</button>
+
+<footer class="footer">
+  <p>&copy; 2026 RaiderBase. Juega inteligentemente.</p>
+</footer>
+
+<script src="js/strategies.js"></script>
+<script src="js/app.js"></script>
+
+<!-- Registrar Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(registration => {
+        console.log('✅ Service Worker registrado:', registration);
+      }).catch(error => {
+        console.log('❌ Error registrando Service Worker:', error);
+      });
+    });
+  }
+
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBtn').style.display = 'block';
+  });
+
+  function installApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('✅ Usuario instaló la app');
+          document.getElementById('installBtn').style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+  }
+
+  window.addEventListener('appinstalled', () => {
+    console.log('✅ App instalada con éxito');
+  });
+</script>
+
+</body>
+</html>
